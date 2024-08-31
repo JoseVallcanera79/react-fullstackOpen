@@ -9,6 +9,7 @@ import Ejer16 from "./components/Ejer16.jsx";
 import Ejer17 from "./components/Ejer17.jsx";
 import Anecdotes from "./components/Anecdotes.jsx";
 import Note from "./components/Note.jsx"
+import Course from "./components/Course.jsx";
 
 const Hello = (props) => {
     const { name, age, birthMonth } = props;
@@ -278,6 +279,9 @@ const App = (props) => {
 
             <div>
                 <Note notes={notes} />
+            </div>
+            <div>
+                <Course />
             </div>
         </div>
     );
