@@ -183,108 +183,114 @@ const App = (props) => {
 
     console.log(notes);
 
-    return (
-        <div>
-            <Header /><br />
-            <Content /><br />
-            <Total /><br />
 
-            <p>Ejercicio 1.2</p>
-            <Anecdotes />
+    const addNote = (event) => {
+        event.preventDefault()
+        console.log('button clicked', event.target)
+    } 
 
-            <p>Ejercicio 1.3</p>
-            <Ejer13 />
-
-            <p>Ejercicio 1.4</p>
-            <Ejer14 />
-
-            <p>Ejercicio 1.5</p>
-            <Ejer15 />
-
-            <p>Ejercicio 1.6</p>
-            <Ejer16 />
-
-            <p>Ejercicio 1.7</p>
-            <Ejer17 />
-
-            <h1>Eventos Props</h1>
+        return (
             <div>
-                <h3>Greetings</h3>
-                <Hello name="Maya" age={34 + 10} birthMonth={12} />
-                <Hello name={name} age={age} birthMonth={birthMonth} />
+                <Header /><br />
+                <Content /><br />
+                <Total /><br />
+
+                <p>Ejercicio 1.2</p>
+                <Anecdotes />
+
+                <p>Ejercicio 1.3</p>
+                <Ejer13 />
+
+                <p>Ejercicio 1.4</p>
+                <Ejer14 />
+
+                <p>Ejercicio 1.5</p>
+                <Ejer15 />
+
+                <p>Ejercicio 1.6</p>
+                <Ejer16 />
+
+                <p>Ejercicio 1.7</p>
+                <Ejer17 />
+
+                <h1>Eventos Props</h1>
+                <div>
+                    <h3>Greetings</h3>
+                    <Hello name="Maya" age={34 + 10} birthMonth={12} />
+                    <Hello name={name} age={age} birthMonth={birthMonth} />
+                </div>
+
+                <p>Contador</p>
+                <div>
+                    <Display counter={counter} />
+                    <Button onClick={handleIncrement} text='Increment' />
+                    <Button onClick={handleReset} text='Zero' />
+                    <Button onClick={handleDecrement} text='Decrement' />
+                </div>
+
+                <p>Contador Complejo</p>
+                <div>
+                    {left}
+                    <button onClick={() => setLeft(left + 1)}>left</button>
+                    {right}
+                    <button onClick={() => setRight(right + 1)}>right</button>
+                    <button onClick={handleResetComplex}>Reset Complex</button>
+                </div>
+
+                <p>Guardar variables</p>
+                <div>
+                    {clicks.left}
+                    <button onClick={handleLeftClick}>left</button>
+                    <button onClick={handleRightClick}>right</button>
+                    {clicks.right}
+                    <button onClick={handleResetClick}>Reset</button>
+                </div>
+
+                <p>Arrays</p>
+                <div>
+                    <button onClick={handleLeftClickArray}>left</button>
+                    <button onClick={handleRightClickArray}>right</button>
+                    <button onClick={handleResetArray}>Reset</button>
+
+                    <p>{allClicks.join(' ')}</p>
+                    <p>Total L: {totalL}</p>
+                    <p>Total R: {totalR}</p>
+                </div>
+
+                <p>HISTORY PROPS</p>
+                <div>
+                    {left}
+                    <button onClick={handleLeftClick}>left</button>
+                    <button onClick={handleRightClick}>right</button>
+                    {right}
+                    <History allClicks={allClicks} />
+                </div>
+
+                <p>Funcion que devuelve una funcion</p>
+                <div>
+                    {value}
+                    <button onClick={setToValue(handleThousand)}>thousand</button>
+                    <button onClick={setToValue(0)}>reset</button>
+                    <button onClick={setToValue(value + 1)}>increment</button>
+                </div>
+
+                <p>Funcion text</p>
+                <div>
+                    {value}
+                    <ButtonIncrement handleClick={setToValue(handleThousand)} text="thousand" />
+                    <ButtonIncrement handleClick={setToValue(0)} text="cero" />
+                    <ButtonIncrement handleClick={setToValue(value + 1)} text="increment" />
+                </div>
+
+
+                <div>
+                    <Note notes={notes} />
+                </div>
+                <div>
+                    <Course />
+                </div>
             </div>
+        );
+    };
 
-            <p>Contador</p>
-            <div>
-                <Display counter={counter} />
-                <Button onClick={handleIncrement} text='Increment' />
-                <Button onClick={handleReset} text='Zero' />
-                <Button onClick={handleDecrement} text='Decrement' />
-            </div>
-
-            <p>Contador Complejo</p>
-            <div>
-                {left}
-                <button onClick={() => setLeft(left + 1)}>left</button>
-                {right}
-                <button onClick={() => setRight(right + 1)}>right</button>
-                <button onClick={handleResetComplex}>Reset Complex</button>
-            </div>
-
-            <p>Guardar variables</p>
-            <div>
-                {clicks.left}
-                <button onClick={handleLeftClick}>left</button>
-                <button onClick={handleRightClick}>right</button>
-                {clicks.right}
-                <button onClick={handleResetClick}>Reset</button>
-            </div>
-
-            <p>Arrays</p>
-            <div>
-                <button onClick={handleLeftClickArray}>left</button>
-                <button onClick={handleRightClickArray}>right</button>
-                <button onClick={handleResetArray}>Reset</button>
-
-                <p>{allClicks.join(' ')}</p>
-                <p>Total L: {totalL}</p>
-                <p>Total R: {totalR}</p>
-            </div>
-
-            <p>HISTORY PROPS</p>
-            <div>
-                {left}
-                <button onClick={handleLeftClick}>left</button>
-                <button onClick={handleRightClick}>right</button>
-                {right}
-                <History allClicks={allClicks} />
-            </div>
-
-            <p>Funcion que devuelve una funcion</p>
-            <div>
-                {value}
-                <button onClick={setToValue(handleThousand)}>thousand</button>
-                <button onClick={setToValue(0)}>reset</button>
-                <button onClick={setToValue(value + 1)}>increment</button>
-            </div>
-
-            <p>Funcion text</p>
-            <div>
-                {value}
-                <ButtonIncrement handleClick={setToValue(handleThousand)} text="thousand" />
-                <ButtonIncrement handleClick={setToValue(0)} text="cero" />
-                <ButtonIncrement handleClick={setToValue(value + 1)} text="increment" />
-            </div>
-
-
-            <div>
-                <Note notes={notes} />
-            </div>
-            <div>
-                <Course />
-            </div>
-        </div>
-    );
-};
-
-export default App;
+    export default App;
