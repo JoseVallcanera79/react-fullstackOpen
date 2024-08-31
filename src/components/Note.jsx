@@ -1,8 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const Note = ({ notes }) => {
-    const [newNote, setNewNote] = useState(''); // Estado para la nueva nota
-    const [allNotes, setAllNotes] = useState(notes); // Estado para todas las notas
+const Note = ({ initialNotes }) => {
+    const [newNote, setNewNote] = useState('');
+    const [allNotes, setAllNotes] = useState([]);
+
+    // Cargar notas desde localStorage al montar el componente
+    useEffect(() => {
+        const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+        // Solo establecer notas iniciales si localStorage está vacío
+        if (savedNotes.length === 0) {
+            setAllNotes(initialNotes);
+        } else {
+            setAllNotes(savedNotes);
+        }
+    }, [initialNotes]);
+
+    // Guardar notas en localStorage solo cuando cambian
+    useEffect(() => {
+        console.log('Saving notes to localStorage:', allNotes);
+        localStorage.setItem('notes', JSON.stringify(allNotes));
+    }, [allNotes]);
 
     // Función para manejar el cambio de input
     const handleNoteChange = (event) => {
@@ -13,15 +30,33 @@ const Note = ({ notes }) => {
     const addNote = (event) => {
         event.preventDefault();
 
+        if (newNote.trim() === '') return; // No agregar notas vacías
+
+        // Verificar IDs existentes y generar un nuevo ID único
+        const existingIds = new Set(allNotes.map(note => note.id));
+        let newId = 1;
+
+        while (existingIds.has(newId)) {
+            newId++;
+        }
+
+        console.log('New ID for the note:', newId);
+
         const noteObject = {
-            id: allNotes.length + 1, // Generar un nuevo ID
+            id: newId,
             content: newNote,
-            important: false // Podrías agregar más propiedades aquí si es necesario
+            important: false
         };
 
-        setAllNotes(allNotes.concat(noteObject)); // Agregar la nueva nota al estado
+        setAllNotes(prevNotes => [...prevNotes, noteObject]); // Agregar la nueva nota al estado
         setNewNote(''); // Limpiar el input
     };
+
+        // Función para eliminar todas las notas
+        const deleteAllNotes = () => {
+            setAllNotes([]); // Limpiar el estado
+            localStorage.removeItem('notes'); // Eliminar las notas de localStorage
+        };
 
     return (
         <div>
@@ -33,7 +68,8 @@ const Note = ({ notes }) => {
             </ul>
             <form onSubmit={addNote}>
                 <input value={newNote} onChange={handleNoteChange} />
-                <button type="submit">Agregar Nota</button>
+                <button type="submit">save</button>
+                <button onClick={deleteAllNotes}>Delete All Notes</button> {/* Botón para eliminar todas las notas */}
             </form>
         </div>
     );

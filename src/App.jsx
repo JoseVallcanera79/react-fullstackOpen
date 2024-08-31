@@ -284,7 +284,7 @@ const App = (props) => {
 
 
                 <div>
-                    <Note notes={notes} />
+                    <Note initialNotes={notes} />
                 </div>
                 <div>
                     <Course />
