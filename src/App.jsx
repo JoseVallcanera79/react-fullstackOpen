@@ -8,6 +8,7 @@ import Ejer15 from "./components/Ejer15.jsx";
 import Ejer16 from "./components/Ejer16.jsx";
 import Ejer17 from "./components/Ejer17.jsx";
 import Anecdotes from "./components/Anecdotes.jsx";
+import Note from "./components/Note.jsx"
 
 const Hello = (props) => {
     const { name, age, birthMonth } = props;
@@ -67,7 +68,7 @@ const ButtonIncrement = (props) => (
 
 
 const App = (props) => {
-  
+
     const [counter, setCounter] = useState(0);
     const [left, setLeft] = useState(0);
     const [right, setRight] = useState(0);
@@ -161,8 +162,25 @@ const App = (props) => {
 
     };
 
-    const { notes } = props
-    console.log('%c Notes: ', 'color: #007acc;', notes);
+    const notes = [
+        {
+            id: 1,
+            content: 'HTML is easy',
+            important: true
+        },
+        {
+            id: 2,
+            content: 'Browser can execute only JavaScript',
+            important: false
+        },
+        {
+            id: 3,
+            content: 'GET and POST are the most important methods of HTTP protocol',
+            important: true
+        }
+    ]
+
+    console.log(notes);
 
     return (
         <div>
@@ -259,14 +277,7 @@ const App = (props) => {
 
 
             <div>
-                <div>
-                    <h1>Notes</h1>
-                    <ul>
-                        {notes.map(note => (
-                            <li key={note.id}>{note.content}</li>
-                        ))}
-                    </ul>
-                </div>
+                <Note notes={notes} />
             </div>
         </div>
     );
