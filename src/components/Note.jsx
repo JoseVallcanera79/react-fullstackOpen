@@ -32,6 +32,9 @@ const Note = ({ initialNotes }) => {
 
         if (newNote.trim() === '') return; // No agregar notas vacías
 
+        //manejar el true o false
+        const important = newNote.length >= 10 ? true : false;
+
         // Verificar IDs existentes y generar un nuevo ID único
         const existingIds = new Set(allNotes.map(note => note.id));
         let newId = 1;
@@ -45,7 +48,7 @@ const Note = ({ initialNotes }) => {
         const noteObject = {
             id: newId,
             content: newNote,
-            important: false
+            important: important
         };
 
         setAllNotes(prevNotes => [...prevNotes, noteObject]); // Agregar la nueva nota al estado
