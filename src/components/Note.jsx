@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react";
 const Note = ({ initialNotes }) => {
     const [newNote, setNewNote] = useState('');
     const [allNotes, setAllNotes] = useState([]);
+    const [showAll, setShowAll] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
 
     // Cargar notas desde localStorage al montar el componente
     useEffect(() => {
         const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
-        // Solo establecer notas iniciales si localStorage está vacío
-        if (savedNotes.length === 0 && initialNotes) {
+        if (savedNotes.length === 0) {
             setAllNotes(initialNotes);
         } else {
             setAllNotes(savedNotes);
@@ -18,22 +18,23 @@ const Note = ({ initialNotes }) => {
 
     // Guardar notas en localStorage solo cuando cambian
     useEffect(() => {
-        console.log('Saving notes to localStorage:', allNotes);
         localStorage.setItem('notes', JSON.stringify(allNotes));
     }, [allNotes]);
 
-    // Función para manejar el cambio de input
+    // Filtrar las notas a mostrar basadas en el estado showAll
+    const notesToShow = showAll ? allNotes : allNotes.filter(note => note.important);
+
+    // Manejar cambios en el input de nueva nota
     const handleNoteChange = (event) => {
         setNewNote(event.target.value);
     };
 
     // Función para eliminar todas las notas
-    const deleteAllNotes = (event) => {
-        event.preventDefault(); // Prevenir el comportamiento por defecto del botón dentro del formulario
-        setAllNotes([]); // Limpiar el estado
-        setNewNote(''); // Limpiar el estado del campo de entrada
-        setErrorMessage(''); // Limpiar cualquier mensaje de error existente
-        localStorage.removeItem('notes'); // Eliminar las notas de localStorage
+    const deleteAllNotes = () => {
+        setAllNotes([]);
+        setNewNote('');
+        setErrorMessage('');
+        localStorage.removeItem('notes');
     };
 
     // Función para manejar el submit del formulario
@@ -42,50 +43,79 @@ const Note = ({ initialNotes }) => {
 
         if (newNote.trim() === '') {
             setErrorMessage('Debe insertar un mensaje');
-            return; // No agregar notas vacías
-        } else if (newNote.length < 3) {
-            setErrorMessage('La nota debe tener mas de 3 caracteres');
             return;
         }
 
-        // Manejar el true o false
-        const important = newNote.length >= 10;
-
-        // Verificar IDs existentes y generar un nuevo ID único
+        // Generar un ID único para la nueva nota
         const existingIds = new Set(allNotes.map(note => note.id));
         let newId = 1;
-
         while (existingIds.has(newId)) {
             newId++;
         }
 
-        console.log('New ID for the note:', newId);
-
         const noteObject = {
             id: newId,
             content: newNote,
-            important: important
+            important: Math.random() > 0.5  // Importancia aleatoria
         };
 
-        setAllNotes(prevNotes => [...prevNotes, noteObject]); // Agregar la nueva nota al estado
-        setNewNote(''); // Limpiar el input
-        setErrorMessage(''); // Limpiar cualquier mensaje de error existente
+        setAllNotes(prevNotes => [...prevNotes, noteObject]);
+        setNewNote('');
+        setErrorMessage('');
     };
+
+    // Función para filtrar y mostrar solo las notas importantes
+    const compNotes = () => {
+
+        <div>
+            <button onClick={() => setShowAll(true)}>
+                Show All
+            </button>
+        </div>
+        console.log('Filtrando notas importantes:', allNotes.filter(note => note.important));
+
+        setShowAll(false);
+        // Cambiar el estado para mostrar solo las importantes
+    };
+    const todasNotas = () => {
+        <button type="button" onClick={compNotes}>
+            Comparar Notas (Show Important)
+        </button>
+        console.log('Filtrando notas:', allNotes)
+
+
+    }
+
 
     return (
         <div>
             <h1>Notes</h1>
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+            <div>
+                <button onClick={() => { todasNotas(); setShowAll(true) }}>
+                    Show All
+                </button>
+                <button type="button" onClick={compNotes}>
+                    Comparar Notas (Show Important)
+                </button>
+
+            </div>
+
             <ul>
-                {allNotes.map(note => (
-                    <li key={note.id}>{note.content}</li>
+                {notesToShow.map(note => (
+                    <li key={note.id}>
+                        {note.content} <strong>{note.important ? "(Important)" : ""}</strong>
+                    </li>
                 ))}
             </ul>
+
             <form onSubmit={addNote}>
                 <input value={newNote} onChange={handleNoteChange} />
-                <button type="submit">Save</button>
-                <button type="button" onClick={deleteAllNotes}>Delete All Notes</button> {/* Botón para eliminar todas las notas */}
+                <button type="submit">save</button>
+                <button type="button" onClick={deleteAllNotes}>Delete All Notes</button>
             </form>
+
+            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         </div>
     );
 };
