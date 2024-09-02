@@ -10,6 +10,7 @@ import Ejer17 from "./components/Ejer17.jsx";
 import Anecdotes from "./components/Anecdotes.jsx";
 import Note from "./components/Note.jsx"
 import Course from "./components/Course.jsx";
+import Agenda from "./components/Agenda.jsx";
 
 const Hello = (props) => {
     const { name, age, birthMonth } = props;
@@ -287,6 +288,9 @@ const App = (props) => {
                 </div>
                 <div>
                     <Course />
+                </div>
+                <div>
+                    <Agenda/>
                 </div>
             </div>
         );
