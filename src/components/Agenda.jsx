@@ -29,6 +29,15 @@ const Agenda = () => {
             nombre: newName
         };
 
+        // Verificar si la persona ya existe en la lista
+        const existePersona = personas.some(persona => persona.nombre.toLowerCase() === newName.toLowerCase());
+        if (existePersona) {
+            console.log('Error. La persona ya existe en la base de datos:',(existePersona))
+            alert('Error. La persona ya existe en la base de datos');
+            return;
+        }
+        console.log('Error. La persona ya existe en la base de datos:',(existePersona))
+
         // Log de la nueva persona que se está agregando
         console.log('Añadiendo nueva persona:', newPersona);
 
@@ -65,8 +74,9 @@ const Agenda = () => {
                     <button type="button" onClick={eliminarPersonas}>Eliminar</button>
                 </div>
             </form>
-
+             
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+            
             <h2>Numbers</h2>
             <ul>
                 {personas.map(persona => (
