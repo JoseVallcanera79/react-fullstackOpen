@@ -38,18 +38,36 @@ const Agenda = () => {
         const updatedPersonas = [...personas, newPersona];
         setPersonas(updatedPersonas);
 
+        console.log('Nueva persona:', newPersona); // Mostrar la persona
+
+
         setNewName(''); // Limpiar el campo de añadir nombre
         setNewNumber(''); // Limpiar el campo de añadir teléfono
         setErrorMessage('');
     };
 
-    // Función para manejar la búsqueda
-    const buscar = () => {
-        const resultado = personas.filter(persona =>
-            persona.nombre.toLowerCase().includes(searchName.toLowerCase())
-        );
-        setFilteredPersonas(resultado); // Actualizar la lista de búsqueda
-    };
+   // Función para manejar la búsqueda
+   const buscarNombre = () => {
+    if (searchName.trim() === '') {
+        setErrorMessage('Debe ingresar un nombre para buscar');
+        return;
+    }
+
+    const resultado = personas.filter(persona =>
+        persona.nombre.toLowerCase().includes(searchName.toLowerCase())
+    );
+
+    if (resultado.length === 0) {
+        alert('Error. Esta persona no está en la base de datos');
+    } else {
+        setErrorMessage(''); // Limpiar mensaje de error si se encuentran resultados
+    }
+
+    console.log('Resultado búsqueda:', resultado);
+    setFilteredPersonas(resultado); 
+    setSearchName(''); // Limpiar búsqueda
+};
+
 
     const eliminarPersonas = () => {
         setPersonas([]);
@@ -60,6 +78,17 @@ const Agenda = () => {
         setErrorMessage('');
     };
 
+    const vaciarBusqueda = () => {
+        setSearchName(''); // Limpiar el campo de búsqueda
+
+    }
+
+    // Función combinada para buscar y vaciar búsqueda
+    const handleBuscar = () => {
+        buscarNombre();
+        vaciarBusqueda();
+    };
+
     return (
         <div>
             <h2>Phonebook</h2>
@@ -67,21 +96,27 @@ const Agenda = () => {
             {/* Sección de búsqueda */}
             <div>
                 Buscar por nombre:
-                <input 
+                <input
                     type="text"
-                    value={searchName} 
-                    onChange={(e) => setSearchName(e.target.value)} 
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+
                 />
-                <button type="button" onClick={buscar}>Buscar</button>
+
+                <button type="button" onClick={handleBuscar}>Buscar</button>
+
+
             </div>
+
+
 
             {/* Formulario para añadir una nueva persona */}
             <form onSubmit={addNombre}>
                 <div>
-                    Nombre: 
-                    <input 
-                        value={newName} 
-                        onChange={(e) => setNewName(e.target.value)} 
+                    Nombre:
+                    <input
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
                     />
                 </div>
                 <div>
