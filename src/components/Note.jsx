@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 
 const Note = ({ initialNotes }) => {
     const [newNote, setNewNote] = useState('');
@@ -41,6 +43,7 @@ const Note = ({ initialNotes }) => {
     const addNote = (event) => {
         event.preventDefault();
 
+
         if (newNote.trim() === '') {
             setErrorMessage('Debe insertar un mensaje');
             return;
@@ -59,10 +62,19 @@ const Note = ({ initialNotes }) => {
             important: Math.random() > 0.5  // Importancia aleatoria
         };
 
+        //Devolver nueva nota al db.json
+        axios   
+         .post('http://localhost:3001/notes', noteObject)   
+         .then(response => {     
+             console.log(response)    })
+
+            
         setAllNotes(prevNotes => [...prevNotes, noteObject]);
         setNewNote('');
         setErrorMessage('');
     };
+
+
 
     // Función para filtrar y mostrar solo las notas importantes
     const compNotes = () => {

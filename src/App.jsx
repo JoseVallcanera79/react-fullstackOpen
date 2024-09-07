@@ -192,14 +192,10 @@ const App = (props) => {
         console.log('button clicked', event.target)
     }
 
-    useEffect(() => {
-        console.log('effect')
-        axios.get('http://localhost:3001/notes').then(response => {
-            console.log('promise fulfilled')
-            setNotas(response.data)
-        })
-    }, [])
-    console.log('render', notas.length, 'notas')
+
+
+
+    
 
     return (
         <div>
@@ -304,6 +300,8 @@ const App = (props) => {
             <div>
                 <Agenda />
             </div>
+           
+         
         </div>
     );
 };
