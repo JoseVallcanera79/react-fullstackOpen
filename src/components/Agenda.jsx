@@ -85,13 +85,59 @@ const Agenda = () => {
     };
 
     const eliminarPersonas = () => {
-        setPersonas([]);
-        setFilteredPersonas([]); // Vaciar también los resultados de búsqueda
-        setNewName('');
-        setNewNumber('');
-        setSearchName(''); // Limpiar el campo de búsqueda
-        setErrorMessage('');
+        const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar todas las personas?');
+        
+        if (confirmacion) {
+            // Iterar sobre todas las personas y eliminarlas por su ID
+            const promesas = personas.map(persona => 
+                axios.delete(`http://localhost:3002/personas/${persona.id}`)
+            );
+    
+            // Esperar a que todas las eliminaciones se completen
+            Promise.all(promesas)
+                .then(() => {
+                    setPersonas([]); // Vaciar todas las personas en el frontend
+                    setFilteredPersonas([]); // Vaciar también los resultados de búsqueda
+                    setNewName(''); // Limpiar el formulario
+                    setNewNumber('');
+                    setSearchName(''); // Limpiar el campo de búsqueda
+                    setErrorMessage('');
+                    alert('Todas las personas han sido eliminadas exitosamente');
+                })
+                .catch(error => {
+                    console.error('Error al eliminar las personas:', error);
+                    setErrorMessage('Error al eliminar las personas');
+                });
+        } else {
+            alert('Eliminación cancelada');
+        }
     };
+    
+    
+    
+
+
+    const eliminarNumero = (id, nombre) => {
+        const confirmacion = window.confirm(`¿Estás seguro de que quieres eliminar a ${nombre}?`);
+        
+        if (confirmacion) {
+            axios.delete(`http://localhost:3002/personas/${id}`)
+                .then(() => {
+                    setPersonas(personas.filter(persona => persona.id !== id)); // Eliminar del estado
+                    alert(`Persona eliminada exitosamente: ${nombre}`); // Usar plantillas literales
+                    console.log(`Persona eliminada: ${nombre}`); // Usar plantillas literales
+                })
+                .catch(error => {
+                    console.error('Error al eliminar la persona:', error);
+                    setErrorMessage('Error al eliminar la persona');
+                });
+        } else {
+            alert('Eliminación cancelada');
+        }
+    };
+    
+
+
 
     const vaciarBusqueda = () => {
         setSearchName(''); // Limpiar el campo de búsqueda
@@ -142,8 +188,9 @@ const Agenda = () => {
                 </div>
                 <div>
                     <button type="submit">Añadir</button>
-                    <button type="button" onClick={eliminarPersonas}>Eliminar</button>
+                    <button type="button" onClick={eliminarPersonas}>Eliminar Todos</button>
                 </div>
+                
             </form>
 
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
@@ -154,9 +201,10 @@ const Agenda = () => {
                 {personas.map(persona => (
                     <li key={persona.id}>
                         Nombre: {persona.nombre} - Teléfono: {persona.telefono}
-                    </li>
+                        <button type="button" onClick={() => eliminarNumero(persona.id, persona.nombre)}>Eliminar</button>                    </li>
                 ))}
             </ul>
+
 
             {/* Mostrar resultados de búsqueda */}
             <h2>Resultados de la Búsqueda</h2>

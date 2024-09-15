@@ -1,9 +1,3 @@
 {
-  "personas": [
-    {
-      "id": "69ec",
-      "nombre": "alejandro",
-      "telefono": "645321789"
-    }
-  ]
+  "personas": []
 }
