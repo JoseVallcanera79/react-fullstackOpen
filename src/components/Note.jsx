@@ -110,7 +110,6 @@ const Note = () => {
     return (
         <div>
             <h1>Notes</h1>
-
             <div>
                 <button onClick={todasNotas}>
                     Show All
@@ -122,7 +121,7 @@ const Note = () => {
 
             <ul>
                 {notesToShow.map(note => (
-                    <li key={note.id}>
+                    <li className="note" key={note.id}>
                         {note.content} <strong>{note.important ? "(Important)" : ""}</strong>
                         <button onClick={() => toggleImportanceOf(note.id)}>
                             Toggle Importance
@@ -136,7 +135,7 @@ const Note = () => {
                 <button type="submit">Save</button>
                 <button type="button" onClick={deleteAllNotes}>Delete All Notes</button>
             </form>
-
+  
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         </div>
     );

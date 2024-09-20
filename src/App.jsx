@@ -12,6 +12,8 @@ import Note from "./components/Note.jsx"
 import Course from "./components/Course.jsx";
 import Agenda from "./components/Agenda.jsx";
 import axios from "axios";
+import Pais from "./components/Pais.jsx";
+
 
 
 const Hello = (props) => {
@@ -192,10 +194,17 @@ const App = (props) => {
         console.log('button clicked', event.target)
     }
 
+    const Footer = () => {
+        const footerStyle = { color: 'green', fontStyle: 'italic', fontSize: 16 }
+        return (<div style={footerStyle}><br />
+            <em>Note app, Department of Computer Science, University of Helsinki 2024</em>
+        </div>)
+    }
 
 
 
-    
+
+
 
     return (
         <div>
@@ -300,8 +309,17 @@ const App = (props) => {
             <div>
                 <Agenda />
             </div>
-           
-         
+            <div>
+                <h3>Footer</h3>
+                <Footer />
+            </div>
+            <br/>
+            <div>
+                <h2>Paises</h2>
+                <Pais />
+            </div>
+
+
         </div>
     );
 };

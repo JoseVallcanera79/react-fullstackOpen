@@ -31,6 +31,9 @@ const Agenda = () => {
 
         if (newName.trim() === '') {
             setErrorMessage('Debe insertar un nombre');
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 5000); // Limpiar el mensaje después de 5 segundos
             return;
         } else if (newNumber.trim() === '') {
             setErrorMessage('Debe insertar un teléfono');
@@ -91,11 +94,21 @@ const Agenda = () => {
             // Iterar sobre todas las personas y eliminarlas por su ID
             const promesas = personas.map(persona => 
                 axios.delete(`http://localhost:3002/personas/${persona.id}`)
+                    .then(response => ({
+                        ...persona, // Mantén la información de la persona
+                        eliminado: true,
+                        respuesta: response.data // Añadir la respuesta del servidor (si la hay)
+                    }))
+                    .catch(error => ({
+                        ...persona,
+                        eliminado: false,
+                        error: error.message // Guardar el error si ocurrió
+                    }))
             );
     
             // Esperar a que todas las eliminaciones se completen
             Promise.all(promesas)
-                .then(() => {
+                .then((personasEliminadas) => {
                     setPersonas([]); // Vaciar todas las personas en el frontend
                     setFilteredPersonas([]); // Vaciar también los resultados de búsqueda
                     setNewName(''); // Limpiar el formulario
@@ -103,6 +116,7 @@ const Agenda = () => {
                     setSearchName(''); // Limpiar el campo de búsqueda
                     setErrorMessage('');
                     alert('Todas las personas han sido eliminadas exitosamente');
+                    console.log('Personas eliminadas o con error:', personasEliminadas);
                 })
                 .catch(error => {
                     console.error('Error al eliminar las personas:', error);
@@ -112,6 +126,7 @@ const Agenda = () => {
             alert('Eliminación cancelada');
         }
     };
+    
     
     
     

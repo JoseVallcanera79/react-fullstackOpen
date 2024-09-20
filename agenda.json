@@ -1,3 +1,9 @@
 {
-  "personas": []
+  "personas": [
+    {
+      "id": "d9e1",
+      "nombre": "kokokokokok",
+      "telefono": "222222"
+    }
+  ]
 }
