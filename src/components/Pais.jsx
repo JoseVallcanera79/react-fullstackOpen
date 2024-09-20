@@ -11,29 +11,32 @@ const Pais = () => {
 
     // omitir si el pais no está definido
     if (name) {
-      console.log('Nuevo pais', name)
-      if (name) {
-        console.log('Buscando países que coincidan con:', name);
-        axios.get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
-          .then(response => {
-            const filteredCountries = response.data.filter(country => 
-              country.name.common.toLowerCase().includes(name.toLowerCase())
-            );
-            
-            console.log('Países encontrados:', filteredCountries);
-      
-            if (filteredCountries.length > 10) {
-              setCountry({ error: 'Demasiados países encontrados. Por favor, especifica más.' });
-            } else if (filteredCountries.length > 1) {
-              setCountry(filteredCountries); // Muestra todos los países si hay entre 2 y 10 resultados
-            } else {
-              setCountry(filteredCountries[0]); // Solo un país, muestra ese directamente
-            }
-          })
-          .catch(error => console.error('Error al buscar países:', error));
-      }
-      
+      axios.get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
+        .then(response => {
+          const filteredCountries = response.data.filter(country =>
+            country.name.common.toLowerCase().includes(name.toLowerCase())
+          );
+
+          if (filteredCountries.length > 10) {
+            setCountry({ error: 'Demasiados países encontrados. Por favor, especifica más.' });
+          } else if (filteredCountries.length > 1) {
+            setCountry(filteredCountries);
+          } else if (filteredCountries.length === 1) {
+            const countryData = filteredCountries[0];
+            setCountry({
+              name: countryData.name.common,
+              capital: countryData.capital[0],
+              area: countryData.area,
+              flag: countryData.flags.png,
+              languages: Object.values(countryData.languages).join(', '),
+            });
+          } else {
+            setCountry({ error: 'No se encontró el país.' });
+          }
+        })
+        .catch(error => console.error('Error al buscar países:', error));
     }
+
 
   }, [name])
 
@@ -52,8 +55,19 @@ const Pais = () => {
         Pais: <input value={value} onChange={handleChange} />
         <button type="submit">exchange country</button>
       </form>
+      
+      {country.name && (
+        <div>
+          <h2>{country.name}</h2>
+          <p>Capital: {country.capital}</p>
+          <p>Área: {country.area} km²</p>
+          <p>Idiomas: {country.languages}</p>
+          <img src={country.flag} alt={`Bandera de ${country.name}`} width="100" />
+        </div>
+      )}
+
       <pre>
-        {JSON.stringify(country, null, 2)}
+        {JSON.stringify(country, name, 2)}
       </pre>
     </div>
   )
