@@ -11,8 +11,8 @@ import Anecdotes from "./components/Anecdotes.jsx";
 import Note from "./components/Note.jsx"
 import Course from "./components/Course.jsx";
 import Agenda from "./components/Agenda.jsx";
-import axios from "axios";
 import Pais from "./components/Pais.jsx";
+// Importa tu archivo CSS
 
 
 
