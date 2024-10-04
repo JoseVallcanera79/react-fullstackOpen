@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { request, response } from 'express'
 const app = express()
 app.use(express.json());
 
@@ -66,6 +66,31 @@ app.post('/api/notes', (request, response) => {
 
   response.json(note)
 })
+
+app.put('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id);
+  const body = request.body;
+
+  // Busca la nota
+  const noteIndex = notes.findIndex(note => note.id === id);
+
+  if (noteIndex !== -1) {
+    // Actualiza la nota
+    const updatedNote = {
+      ...notes[noteIndex],
+      content: body.content,
+      important: body.important !== undefined ? body.important : notes[noteIndex].important,
+    };
+
+    notes[noteIndex] = updatedNote; // Actualiza el arreglo de notas
+    console.log('Nota modificada', updatedNote);
+
+    response.json(updatedNote); // Devuelve la nota actualizada
+  } else {
+    response.status(404).send({ error: 'Note not found' });
+  }
+});
+
 
 app.delete('/api/notes/:id', (request, response) => {
   const id = Number(request.params.id)
